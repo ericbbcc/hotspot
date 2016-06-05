@@ -25,11 +25,13 @@
 #ifndef SHARE_VM_MEMORY_DEFNEWGENERATION_HPP
 #define SHARE_VM_MEMORY_DEFNEWGENERATION_HPP
 
-#include "gc_implementation/shared/ageTable.hpp"
-#include "gc_implementation/shared/cSpaceCounters.hpp"
-#include "gc_implementation/shared/generationCounters.hpp"
-#include "memory/generation.inline.hpp"
-#include "utilities/stack.hpp"
+#include <cstdlib>
+#include "../gc_implementation/shared/ageTable.hpp"
+#include "../gc_implementation/shared/cSpaceCounters.hpp"
+#include "../gc_implementation/shared/generationCounters.hpp"
+#include "../memory/generation.inline.hpp"
+#include "../utilities/stack.hpp"
+#include "../precompiled.hpp"
 
 class EdenSpace;
 class ContiguousSpace;
@@ -45,6 +47,7 @@ protected:
   Generation* _next_gen;
   int         _tenuring_threshold;   // Tenuring threshold for next collection.
   ageTable    _age_table;
+  //以字为单位,直接分配在老年代的对象大小
   // Size of object to pretenure in words; command line provides bytes
   size_t        _pretenure_size_threshold_words;
 

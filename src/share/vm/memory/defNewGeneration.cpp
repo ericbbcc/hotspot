@@ -22,23 +22,23 @@
  *
  */
 
-#include "precompiled.hpp"
-#include "gc_implementation/shared/collectorCounters.hpp"
-#include "gc_implementation/shared/gcPolicyCounters.hpp"
-#include "gc_implementation/shared/spaceDecorator.hpp"
-#include "memory/defNewGeneration.inline.hpp"
-#include "memory/gcLocker.inline.hpp"
-#include "memory/genCollectedHeap.hpp"
-#include "memory/genOopClosures.inline.hpp"
-#include "memory/generationSpec.hpp"
-#include "memory/iterator.hpp"
-#include "memory/referencePolicy.hpp"
-#include "memory/space.inline.hpp"
-#include "oops/instanceRefKlass.hpp"
-#include "oops/oop.inline.hpp"
-#include "runtime/java.hpp"
-#include "utilities/copy.hpp"
-#include "utilities/stack.inline.hpp"
+#include "../precompiled.hpp"
+#include "../gc_implementation/shared/collectorCounters.hpp"
+#include "../gc_implementation/shared/gcPolicyCounters.hpp"
+#include "../gc_implementation/shared/spaceDecorator.hpp"
+#include "../memory/defNewGeneration.inline.hpp"
+#include "../memory/gcLocker.inline.hpp"
+#include "../memory/genCollectedHeap.hpp"
+#include "../memory/genOopClosures.inline.hpp"
+#include "../memory/generationSpec.hpp"
+#include "../memory/iterator.hpp"
+#include "../memory/referencePolicy.hpp"
+#include "../memory/space.inline.hpp"
+#include "../oops/instanceRefKlass.hpp"
+#include "../oops/oop.inline.hpp"
+#include "../runtime/java.hpp"
+#include "../utilities/copy.hpp"
+#include "../utilities/stack.inline.hpp"
 #ifdef TARGET_OS_FAMILY_linux
 # include "thread_linux.inline.hpp"
 #endif
@@ -478,6 +478,8 @@ void DefNewGeneration::space_iterate(SpaceClosure* blk,
   blk->do_space(from());
   blk->do_space(to());
 }
+
+//
 
 // The last collection bailed out, we are running out of heap space,
 // so we try to allocate the from-space, too.
@@ -985,6 +987,8 @@ HeapWord* DefNewGeneration::allocate(size_t word_size,
     // Try to allocate until succeeded or the soft limit can't be adjusted
     result = eden()->par_allocate(word_size);
   } while (result == NULL);
+
+  //如果eden区域满了,而且最后一次分配失败了,
 
   // If the eden is full and the last collection bailed out, we are running
   // out of heap space, and we try to allocate the from-space, too.

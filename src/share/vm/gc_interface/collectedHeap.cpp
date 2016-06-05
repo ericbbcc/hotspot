@@ -22,14 +22,14 @@
  *
  */
 
-#include "precompiled.hpp"
-#include "classfile/systemDictionary.hpp"
-#include "gc_implementation/shared/vmGCOperations.hpp"
-#include "gc_interface/collectedHeap.hpp"
-#include "gc_interface/collectedHeap.inline.hpp"
-#include "oops/oop.inline.hpp"
-#include "runtime/init.hpp"
-#include "services/heapDumper.hpp"
+#include "../precompiled.hpp"
+#include "../classfile/systemDictionary.hpp"
+#include "../gc_implementation/shared/vmGCOperations.hpp"
+#include "../gc_interface/collectedHeap.hpp"
+#include "../gc_interface/collectedHeap.inline.hpp"
+#include "../oops/oop.inline.hpp"
+#include "../runtime/init.hpp"
+#include "../services/heapDumper.hpp"
 #ifdef TARGET_OS_FAMILY_linux
 # include "thread_linux.inline.hpp"
 #endif

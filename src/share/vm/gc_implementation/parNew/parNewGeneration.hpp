@@ -25,9 +25,9 @@
 #ifndef SHARE_VM_GC_IMPLEMENTATION_PARNEW_PARNEWGENERATION_HPP
 #define SHARE_VM_GC_IMPLEMENTATION_PARNEW_PARNEWGENERATION_HPP
 
-#include "gc_implementation/parNew/parGCAllocBuffer.hpp"
-#include "memory/defNewGeneration.hpp"
-#include "utilities/taskqueue.hpp"
+#include "../../gc_implementation/parNew/parGCAllocBuffer.hpp"
+#include "../../memory/defNewGeneration.hpp"
+#include "../../utilities/taskqueue.hpp"
 
 class ChunkArray;
 class ParScanWithoutBarrierClosure;

@@ -25,7 +25,7 @@
 #ifndef SHARE_VM_UTILITIES_DEBUG_HPP
 #define SHARE_VM_UTILITIES_DEBUG_HPP
 
-#include "utilities/globalDefinitions.hpp"
+#include "../utilities/globalDefinitions.hpp"
 
 #include <stdarg.h>
 

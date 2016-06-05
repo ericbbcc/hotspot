@@ -25,10 +25,10 @@
 #ifndef SHARE_VM_MEMORY_GENCOLLECTEDHEAP_HPP
 #define SHARE_VM_MEMORY_GENCOLLECTEDHEAP_HPP
 
-#include "gc_implementation/shared/adaptiveSizePolicy.hpp"
-#include "memory/collectorPolicy.hpp"
-#include "memory/generation.hpp"
-#include "memory/sharedHeap.hpp"
+#include "../gc_implementation/shared/adaptiveSizePolicy.hpp"
+#include "../memory/collectorPolicy.hpp"
+#include "../memory/generation.hpp"
+#include "../memory/sharedHeap.hpp"
 
 class SubTasksDone;
 
@@ -67,6 +67,8 @@ public:
   Generation* _gens[max_gens];
   GenerationSpec** _gen_specs;
 
+  //分代回收策略
+
   // The generational collector policy.
   GenCollectorPolicy* _gen_policy;
 
@@ -86,14 +88,19 @@ public:
   // In block contents verification, the number of header words to skip
   NOT_PRODUCT(static size_t _skip_header_HeapWords;)
 
+  //在dump shared classes的时候GC是不被允许的,跟踪状态防止出错
+
   // GC is not allowed during the dump of the shared classes.  Keep track
   // of this in order to provide an reasonable error message when terminating.
   bool _preloading_shared_classes;
 
 protected:
+
   // Directs each generation up to and including "collectedGen" to recompute
   // its desired size.
   void compute_new_generation_sizes(int collectedGen);
+
+  //用于分配内存的帮助方法
 
   // Helper functions for allocation
   HeapWord* attempt_allocation(size_t size,

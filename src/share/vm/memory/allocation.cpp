@@ -22,14 +22,14 @@
  *
  */
 
-#include "precompiled.hpp"
-#include "memory/allocation.hpp"
-#include "memory/allocation.inline.hpp"
-#include "memory/resourceArea.hpp"
-#include "runtime/os.hpp"
-#include "runtime/task.hpp"
-#include "runtime/threadCritical.hpp"
-#include "utilities/ostream.hpp"
+#include "../precompiled.hpp"
+#include "../memory/allocation.hpp"
+#include "../memory/allocation.inline.hpp"
+#include "../memory/resourceArea.hpp"
+#include "../runtime/os.hpp"
+#include "../runtime/task.hpp"
+#include "../runtime/threadCritical.hpp"
+#include "../utilities/ostream.hpp"
 #ifdef TARGET_OS_FAMILY_linux
 # include "os_linux.inline.hpp"
 #endif

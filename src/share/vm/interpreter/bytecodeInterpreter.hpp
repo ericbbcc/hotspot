@@ -25,13 +25,13 @@
 #ifndef SHARE_VM_INTERPRETER_BYTECODEINTERPRETER_HPP
 #define SHARE_VM_INTERPRETER_BYTECODEINTERPRETER_HPP
 
-#include "memory/allocation.hpp"
-#include "oops/methodDataOop.hpp"
-#include "oops/methodOop.hpp"
-#include "runtime/basicLock.hpp"
-#include "runtime/frame.hpp"
-#include "runtime/globals.hpp"
-#include "utilities/globalDefinitions.hpp"
+#include "../memory/allocation.hpp"
+#include "../oops/methodDataOop.hpp"
+#include "../oops/methodOop.hpp"
+#include "../runtime/basicLock.hpp"
+#include "../runtime/frame.hpp"
+#include "../runtime/globals.hpp"
+#include "../utilities/globalDefinitions.hpp"
 #ifdef TARGET_ARCH_x86
 # include "bytes_x86.hpp"
 #endif

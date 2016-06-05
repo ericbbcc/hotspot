@@ -25,15 +25,16 @@
 #ifndef SHARE_VM_MEMORY_GENERATION_HPP
 #define SHARE_VM_MEMORY_GENERATION_HPP
 
-#include "gc_implementation/shared/collectorCounters.hpp"
-#include "memory/allocation.hpp"
-#include "memory/memRegion.hpp"
-#include "memory/referenceProcessor.hpp"
-#include "memory/universe.hpp"
-#include "memory/watermark.hpp"
-#include "runtime/mutex.hpp"
-#include "runtime/perfData.hpp"
-#include "runtime/virtualspace.hpp"
+#include "../gc_implementation/shared/collectorCounters.hpp"
+#include "../memory/allocation.hpp"
+#include "../memory/memRegion.hpp"
+#include "../memory/referenceProcessor.hpp"
+#include "../memory/universe.hpp"
+#include "../memory/watermark.hpp"
+#include "../runtime/mutex.hpp"
+#include "../runtime/perfData.hpp"
+#include "../runtime/virtualspace.hpp"
+#include "../precompiled.hpp"
 
 // A Generation models a heap area for similarly-aged objects.
 // It will contain one ore more spaces holding the actual objects.

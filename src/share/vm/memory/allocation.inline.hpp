@@ -25,7 +25,9 @@
 #ifndef SHARE_VM_MEMORY_ALLOCATION_INLINE_HPP
 #define SHARE_VM_MEMORY_ALLOCATION_INLINE_HPP
 
-#include "runtime/os.hpp"
+#include <cstdlib>
+#include "../runtime/os.hpp"
+#include "../utilities/debug.hpp"
 
 // Explicit C-heap memory management
 

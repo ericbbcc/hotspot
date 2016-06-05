@@ -25,12 +25,15 @@
 #ifndef SHARE_VM_GC_INTERFACE_COLLECTEDHEAP_HPP
 #define SHARE_VM_GC_INTERFACE_COLLECTEDHEAP_HPP
 
-#include "gc_interface/gcCause.hpp"
-#include "memory/allocation.hpp"
-#include "memory/barrierSet.hpp"
-#include "runtime/handles.hpp"
-#include "runtime/perfData.hpp"
-#include "runtime/safepoint.hpp"
+#include "../gc_interface/gcCause.hpp"
+#include "../memory/allocation.hpp"
+#include "../memory/barrierSet.hpp"
+#include "../runtime/handles.hpp"
+#include "../runtime/perfData.hpp"
+#include "../runtime/safepoint.hpp"
+
+//CollectedHeap是HotSpot的java堆的实现,这是个抽象类,因为有可能有多种不同的堆实现
+// 这个类定义了堆必须要实现的接口,而且包含所有堆的基本体系结构
 
 // A "CollectedHeap" is an implementation of a java heap for HotSpot.  This
 // is an abstract class: there may be many different kinds of heaps.  This
@@ -76,6 +79,8 @@ class CollectedHeap : public CHeapObj {
   NOT_PRODUCT(volatile size_t _promotion_failure_alot_count;)
   NOT_PRODUCT(volatile size_t _promotion_failure_alot_gc_number;)
 
+  //当前垃圾回收的原因
+
   // Reason for current garbage collection.  Should be set to
   // a value reflecting no collection between collections.
   GCCause::Cause _gc_cause;
@@ -85,6 +90,8 @@ class CollectedHeap : public CHeapObj {
 
   // Constructor
   CollectedHeap();
+
+  //普通的初始化,在实例构造完成时被调用
 
   // Do common initializations that must follow instance construction,
   // for example, those needing virtual calls.
@@ -173,6 +180,7 @@ class CollectedHeap : public CHeapObj {
 
   virtual CollectedHeap::Name kind() const { return CollectedHeap::Abstract; }
 
+   //如果内存分配失败,则返回JNI_ENOMEM,否则返回JNI_OK
   /**
    * Returns JNI error code JNI_ENOMEM if memory could not be allocated,
    * and JNI_OK on success.
@@ -192,13 +200,19 @@ class CollectedHeap : public CHeapObj {
   virtual size_t capacity() const = 0;
   virtual size_t used() const = 0;
 
+  //返回对象的分配是否达到了不需要垃圾回收的最大值
   // Return "true" if the part of the heap that allocates Java
   // objects has reached the maximal committed limit that it can
   // reach, without a garbage collection.
   virtual bool is_maximal_no_gc() const = 0;
 
+  //返回永久区的容量
   virtual size_t permanent_capacity() const = 0;
+  //返回永久区使用量
   virtual size_t permanent_used() const = 0;
+
+  //支持java.lang.Runtime.maxMemory(),返回vm可以用于分配正常对象的最大值
+  //基于保留地址空间,但是不包括vm内部用于暂存的部分,例如:永久区、年轻代、或者年轻代中的一个survivor区域
 
   // Support for java.lang.Runtime.maxMemory():  return the maximum amount of
   // memory that the vm could make available for storing 'normal' java objects.
@@ -207,6 +221,8 @@ class CollectedHeap : public CHeapObj {
   // perm gen space or, in the case of the young gen, one of the survivor
   // spaces).
   virtual size_t max_capacity() const = 0;
+
+  //如果p指向保留区、返回TRUE
 
   // Returns "TRUE" if "p" points into the reserved area of the heap.
   bool is_in_reserved(const void* p) const {
@@ -217,6 +233,8 @@ class CollectedHeap : public CHeapObj {
     return p == NULL || is_in_reserved(p);
   }
 
+  //如果指向分配对象的头部,则返回TRUE,这个方法操作比较重,我们通常避免调用
+
   // Returns "TRUE" if "p" points to the head of an allocated object in the
   // heap. Since this method can be expensive in general, we restrict its
   // use to assertion checking only.
@@ -225,6 +243,11 @@ class CollectedHeap : public CHeapObj {
   bool is_in_or_null(const void* p) const {
     return p == NULL || is_in(p);
   }
+
+  //我们来定义一下closed subset of a heap,满足下面之一的条件
+  //1)包括所有分配的对象
+  //2)子集中的对象都不会引用外部的对象
+
 
   // Let's define some terms: a "closed" subset of a heap is one that
   //
@@ -258,6 +281,8 @@ class CollectedHeap : public CHeapObj {
     return p == NULL || is_in_closed_subset(p);
   }
 
+  //如果是分配在永久区、则返回TRUE
+
   // XXX is_permanent() and is_in_permanent() should be better named
   // to distinguish one from the other.
 
@@ -282,6 +307,9 @@ class CollectedHeap : public CHeapObj {
     return p == NULL || is_permanent(p);
   }
 
+  //返回对象是否可以被清除,scavenge表示非full gc的gc,如果对象的位置在gc期间被移动了
+  //当前只是简单的认为对象不在永久区并且不为null
+
   // An object is scavengable if its location may move during a scavenge.
   // (A scavenge is a GC which is not a full GC.)
   // Currently, this just means it is not perm (and not null).
@@ -305,22 +333,31 @@ class CollectedHeap : public CHeapObj {
   }
   GCCause::Cause gc_cause() { return _gc_cause; }
 
+  //当前用于GC的线程数量
+
   // Number of threads currently working on GC tasks.
   int n_par_threads() { return _n_par_threads; }
 
+  //将会被复写
+
   // May be overridden to set additional parallelism.
   virtual void set_par_threads(int t) { _n_par_threads = t; };
+
+  //预加载classes到heap的共享部分,然后把数据dump,从而使得其他vm可以加载
 
   // Preload classes into the shared portion of the heap, and then dump
   // that data to a file so that it can be loaded directly by another
   // VM (then terminate).
   virtual void preload_and_dump(TRAPS) { ShouldNotReachHere(); }
 
+  //普通的对象、数组、大对象数组分配
+
   // General obj/array allocation facilities.
   inline static oop obj_allocate(KlassHandle klass, int size, TRAPS);
   inline static oop array_allocate(KlassHandle klass, int size, int length, TRAPS);
   inline static oop large_typearray_allocate(KlassHandle klass, int size, int length, TRAPS);
 
+  //特殊对象、数组分配策略
   // Special obj/array allocation facilities.
   // Some heaps may want to manage "permanent" data uniquely. These default
   // to the general routines if the heap does not support such handling.
@@ -339,6 +376,8 @@ class CollectedHeap : public CHeapObj {
                                                        int size);
   inline static oop permanent_array_allocate(KlassHandle klass, int size, int length, TRAPS);
 
+  //原始内存分配、包括对象和数组
+
   // Raw memory allocation facilities
   // The obj and array allocate methods are covers for these methods.
   // The permanent allocation method should default to mem_allocate if
@@ -349,6 +388,7 @@ class CollectedHeap : public CHeapObj {
                                  bool* gc_overhead_limit_was_exceeded) = 0;
   virtual HeapWord* permanent_mem_allocate(size_t size) = 0;
 
+  //大小数组的边界
   // The boundary between a "large" and "small" array of primitives, in words.
   virtual size_t large_typearray_limit() = 0;
 

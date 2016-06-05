@@ -25,8 +25,12 @@
 #ifndef SHARE_VM_MEMORY_ALLOCATION_HPP
 #define SHARE_VM_MEMORY_ALLOCATION_HPP
 
-#include "runtime/globals.hpp"
-#include "utilities/globalDefinitions.hpp"
+#include <cstdint>
+#include <cstdlib>
+#include "../runtime/globals.hpp"
+#include "../utilities/globalDefinitions.hpp"
+#include "../utilities/debug.hpp"
+
 #ifdef COMPILER1
 #include "c1/c1_globals.hpp"
 #endif
@@ -222,6 +226,8 @@ protected:
   ~Arena();
   void  destruct_contents();
   char* hwm() const             { return _hwm; }
+
+
 
   // Fast allocate in the arena.  Common case is: pointer test + increment.
   void* Amalloc(size_t x) {
